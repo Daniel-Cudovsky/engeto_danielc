@@ -70,44 +70,54 @@ else:
 
 print('Now select a text you want to analyze.')
 
-cislo_textu = int(input('Choose text to analyze (1 - 3): ')) - 1
+pocet_textu = len(TEXTS)
+
+cislo_textu = int(input(f'Choose text to analyze (1 - {pocet_textu}): ')) - 1
 print('-' * 40)
 print('Selected text: \n')
 
-if cislo_textu == 0:
-    print(TEXTS[cislo_textu])
-elif cislo_textu == 1:
-    print(TEXTS[cislo_textu])
-elif cislo_textu == 2:
-    print(TEXTS[cislo_textu])
-else:
-    print('You can only enter a number between 1 - 3. \n'
+
+for vybrany_text in TEXTS:
+    if cislo_textu < pocet_textu:
+        print(TEXTS[cislo_textu])
+        break
+    else:
+        print(f'You can only enter a number between 1 - {pocet_textu}. \n'
           'Start again.'
           )
-    quit()
+        quit()
 print('-' * 40)
 
 ########################-ANALYZOVÁNÍ TEXTU-########################
 
 print("The selected text contains: \n")
 
-# == Počet slov == #
-for slova in TEXTS[cislo_textu]:
-    slova = len(TEXTS[cislo_textu].split())
+slova = 0
+nazvy_cislo = 0
+velka_pismena = 0
+mala_pismena = 0
+cisla = 0
+suma = []
+symboly = (",", ".", ":", "!", "?")
+
+for pocty in TEXTS[cislo_textu].split():
+    slova += 1
+    if pocty.endswith(symboly):
+        pocty = pocty[:-1]
+    if pocty.istitle():
+        nazvy_cislo += 1
+    if pocty.isupper() and pocty.isalpha():
+        velka_pismena += 1
+    if pocty.islower():
+        mala_pismena += 1
+    if pocty.isdigit():
+        cisla += 1
+        suma.append(int(pocty))
 
 if slova > 1:
     print(f'There are {slova} words in the selected text.')
 else:
     print(f'There is {slova} word in the selected text.')
-
-# == Počet slov začínajících velkým písmenem == #
-nazvy_cislo = list()
-
-for nazvy in TEXTS[cislo_textu].split():
-    if nazvy.istitle():
-        nazvy_cislo.append(nazvy)
-
-nazvy_cislo = len(nazvy_cislo)
 
 if nazvy_cislo > 1:
     print(f'There are {nazvy_cislo} titlecase words.')
@@ -116,15 +126,6 @@ elif nazvy_cislo == 0:
 else:
     print(f'There is {nazvy_cislo} titlecase word.')
 
-# == Počet slov psaných VELKÝMI písmeny == #
-velka_pismena = list()
-
-for velka in TEXTS[cislo_textu].split():
-    if velka.isupper() and velka.isalpha():
-        velka_pismena.append(velka)
-
-velka_pismena = len(velka_pismena)
-
 if velka_pismena > 1:
     print(f'There are {velka_pismena} uppercase words.')
 elif velka_pismena == 0:
@@ -132,30 +133,12 @@ elif velka_pismena == 0:
 else:
     print(f'There is {velka_pismena} uppercase word.')
 
-# == Počet slov psaných MALÝMI písmeny == #
-mala_pismena = list()
-
-for mala in TEXTS[cislo_textu].split():
-    if mala.islower():
-        mala_pismena.append(mala)
-
-mala_pismena = len(mala_pismena)
-
 if mala_pismena > 1:
     print(f'There are {mala_pismena} lowercase words.')
 elif mala_pismena == 0:
     print("There aren't any lowercase words.")
 else:
-    print(f'There is {mala_pismena} lowercase word.')
-
-# == Počet čísel v textu == #
-cisla = list()
-
-for cislo in TEXTS[cislo_textu].split():
-    if cislo.isdigit():
-        cisla.append(cislo)
-
-cisla = len(cisla)
+    print(f'There is {mala_pismena} lowercase words.')
 
 if cisla > 1:
     print(f'There are {cisla} numeric strings.')
@@ -164,17 +147,8 @@ elif cisla == 0:
 else:
     print(f'There is {cisla} numeric string.')
 
-# == SUMA všech čísel v textu == #
-suma = list()
-
-for cislo_1 in TEXTS[cislo_textu].split():
-    if cislo_1.isdigit():
-        suma.append(cislo_1)
-
-soucet = sum(int(x) for x in suma) 
-
-if soucet != 0:
-    print(f'The sum of all the numbers {soucet}.')
+if suma:
+    print(f'The sum of all the numbers {sum(suma)}.')
 else:
     print('There are no numbers to count.')
 
@@ -185,184 +159,27 @@ print('-' * 40)
 print('LEN|', '\tOCCURENCES', '\t|NR.')
 print('-' * 40)
 
-pocet_zn = {'zn_1': [], 'zn_2': [], 'zn_3': [], 'zn_4': [], 
-            'zn_5': [], 'zn_6': [], 'zn_7': [], 'zn_8': [], 
-            'zn_9': [], 'zn_10': [], 'zn_11': [], 'zn_12': [],
-            'zn_13': []
-            }
+pocet_zn = {}
 
-for pocet in TEXTS[cislo_textu].split():
-    if pocet.endswith('.') or pocet.endswith(','):
-        pocet = pocet[:-1]
-    if len(pocet) == 1:
-        pocet_zn['zn_1'].append(pocet)
-    elif len(pocet) == 2:
-        pocet_zn['zn_2'].append(pocet)
-    elif len(pocet) == 3:
-        pocet_zn['zn_3'].append(pocet)
-    elif len(pocet) == 4:
-        pocet_zn['zn_4'].append(pocet)
-    elif len(pocet) == 5:
-        pocet_zn['zn_5'].append(pocet)
-    elif len(pocet) == 6:
-        pocet_zn['zn_6'].append(pocet)
-    elif len(pocet) == 7:
-        pocet_zn['zn_7'].append(pocet)
-    elif len(pocet) == 8:
-        pocet_zn['zn_8'].append(pocet)
-    elif len(pocet) == 9:
-        pocet_zn['zn_9'].append(pocet)
-    elif len(pocet) == 10:
-        pocet_zn['zn_10'].append(pocet)
-    elif len(pocet) == 11:
-        pocet_zn['zn_11'].append(pocet)
-    elif len(pocet) == 12:
-        pocet_zn['zn_12'].append(pocet)
-    elif len(pocet) == 13:
-        pocet_zn['zn_13'].append(pocet)
+for slovo in TEXTS[cislo_textu].split():
+    if slovo.endswith(symboly):
+        slovo = slovo[:-1]
+    delka_slova = len(slovo)
+    if delka_slova not in pocet_zn:
+        pocet_zn[delka_slova] = []
+    pocet_zn[delka_slova].append(slovo)
 
+serazene_delky = sorted(pocet_zn.keys())
 
+for delka in serazene_delky:
+    slova = pocet_zn[delka]
+    if len(slova) >= 1:
+        if len(slova) < 4:
+            odsazeni = '\t' * 3
+        elif len(slova) < 12:
+            odsazeni = '\t' * 2
+        else:
+            odsazeni = '\t'
+        print(f'{delka:3}|{"*" * len(slova)}{odsazeni}|{len(slova)}')
 
-if len(pocet_zn['zn_1']) >= 1:
-    if len(pocet_zn['zn_1']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_1']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  1|' + '*' * len(pocet_zn['zn_1']), odsazeni  + '|',
-           len(pocet_zn['zn_1']), sep = ''
-           )
-
-if len(pocet_zn['zn_2']) >= 1:
-    if len(pocet_zn['zn_2']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_2']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  2|' + '*' * len(pocet_zn['zn_2']), odsazeni  + '|',
-           len(pocet_zn['zn_2']), sep = ''
-           )
-
-if len(pocet_zn['zn_3']) >= 1:
-    if len(pocet_zn['zn_3']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_3']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  3|' + '*' * len(pocet_zn['zn_3']), odsazeni  + '|',
-           len(pocet_zn['zn_3']), sep = ''
-           )
-
-if len(pocet_zn['zn_4']) >= 1:
-    if len(pocet_zn['zn_4']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_4']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  4|' + '*' * len(pocet_zn['zn_4']), odsazeni  + '|',
-           len(pocet_zn['zn_4']), sep = ''
-           )
-
-if len(pocet_zn['zn_5']) >= 1:
-    if len(pocet_zn['zn_5']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_5']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  5|' + '*' * len(pocet_zn['zn_5']), odsazeni  + '|',
-           len(pocet_zn['zn_5']), sep = ''
-           )
-
-if len(pocet_zn['zn_6']) >= 1:
-    if len(pocet_zn['zn_6']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_6']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  6|' + '*' * len(pocet_zn['zn_6']), odsazeni  + '|',
-           len(pocet_zn['zn_6']), sep = ''
-           )
-
-if len(pocet_zn['zn_7']) >= 1:
-    if len(pocet_zn['zn_7']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_7']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  7|' + '*' * len(pocet_zn['zn_7']), odsazeni  + '|',
-           len(pocet_zn['zn_7']), sep = ''
-           )
-    
-if len(pocet_zn['zn_8']) >= 1:
-    if len(pocet_zn['zn_8']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_8']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  8|' + '*' * len(pocet_zn['zn_8']), odsazeni  + '|',
-           len(pocet_zn['zn_8']), sep = ''
-           )
-    
-if len(pocet_zn['zn_9']) >= 1:
-    if len(pocet_zn['zn_9']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_9']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print('  9|' + '*' * len(pocet_zn['zn_9']), odsazeni  + '|',
-           len(pocet_zn['zn_9']), sep = ''
-           )
-    
-if len(pocet_zn['zn_10']) >= 1:
-    if len(pocet_zn['zn_10']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_10']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print(' 10|' + '*' * len(pocet_zn['zn_10']), odsazeni  + '|',
-           len(pocet_zn['zn_10']), sep = ''
-           )
-    
-if len(pocet_zn['zn_11']) >= 1:
-    if len(pocet_zn['zn_11']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_11']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print(' 11|' + '*' * len(pocet_zn['zn_11']), odsazeni  + '|',
-           len(pocet_zn['zn_11']), sep = ''
-           )
-    
-if len(pocet_zn['zn_12']) >= 1:
-    if len(pocet_zn['zn_12']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_12']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print(' 12|' + '*' * len(pocet_zn['zn_12']), odsazeni  + '|',
-           len(pocet_zn['zn_12']), sep = ''
-           )
-    
-if len(pocet_zn['zn_13']) >= 1:
-    if len(pocet_zn['zn_13']) < 4:
-        odsazeni = '\t' * 3
-    elif len(pocet_zn['zn_13']) < 12:
-        odsazeni = '\t' * 2
-    else:
-        odsazeni = '\t'
-    print(' 13|' + '*' * len(pocet_zn['zn_13']), odsazeni  + '|',
-           len(pocet_zn['zn_13']), sep = ''
-           )
-    
+print('-' * 40)
